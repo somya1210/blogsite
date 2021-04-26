@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+     <link rel="stylesheet" type="text/css" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <title>Title</title>
+</head>
+<body>
+<h1>add post</h1>
+<div class="form-group">
+<form method="post">
+    {% csrf_token %}
+    {{ form.media }}
+    {{ form.as_p }}
+    <button class="btn btn-secondary">Post</button>
+</form>
+</div>
+<script>
+    var name="{{ user.id }}";
+    document.getElementById("auth").value=name;
+
+</script>
+</body>
+</html>

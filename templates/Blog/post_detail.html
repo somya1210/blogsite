@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+       <link rel="stylesheet" type="text/css" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <title>Detail View</title>
+    <style>
+            .card{
+            box-shadow: 0 16px 48px #E3E7EB;
+        }
+             .masthead {
+            background:lightcoral;
+            height: auto;
+            padding-bottom: 15px;
+            box-shadow: 0 16px 48px #E3E7EB;
+            padding-top: 10px;
+        }
+             button.like{
+	width: 30px;
+	height: 30px;
+	margin: 0 auto;
+	line-heigth: 50px;
+	border-radius: 50%;
+	color: rgba(0,150,136 ,1);
+	background-color:rgba(38,166,154 ,0.3);
+	border-color: rgba(0,150,136 ,1);
+	border-width: 1px;
+	font-size: 15px;
+}
+
+button.dislike{
+	width: 30px;
+	height: 30px;
+	margin: 0 auto;
+	line-heigth: 50px;
+	border-radius: 50%;
+	color: rgba(255,82,82 ,1);
+	background-color: rgba(255,138,128 ,0.3);
+	border-color: rgba(255,82,82 ,1);
+	border-width: 1px;
+	font-size: 15px;
+}
+
+    </style>
+</head>
+<body>
+<header class="masthead">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class=" col-md-8 col-md-10 mx-auto">
+                <div class="site-heading">
+                    <h3 class=" site-heading my-4 mt-3 text-white">POST</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 card mb-4  mt-3 left  top">
+      <div class="card-body">
+        <h1>{% block title %} {{ post.title }} {% endblock title %}</h1>
+        <p class=" text-muted">{{ post.author }} | {{ post.created_on }}</p>
+        <p class="card-text ">{{ post.content | safe }}</p>
+      </div>
+    </div>
+  <form action="{% url 'like_post' post.pk %} " method="post">
+      {% csrf_token %}
+  {% if user.is_authenticated %}
+      {% if liked %}
+          <button class="dislike" value="{{ post.id }}" name="post_id" type="submit">
+	<i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
+</button>
+      {% else %}
+          <button class="like" type="submit" name="post_id" value="{{ post.id }}">
+	<i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+</button>
+
+      {% endif %}
+{% endif %}
+  <br>
+  <hr>
+  Total Likes {{ total_like }}
+  </form>
+  <hr>
+      <h2> Comment Sections</h2>
+  <a href="{% url 'add_comment' post.id %}">AddComment</a>
+      {% if not post.comment.all %}
+      No Comments yet
+      {% else %}
+      {% for c in post.comment.all %}
+          <div class="col-md-8 card mb-4  mt-3 left  top">
+      <div class="card-body">
+          <p class=" text-muted"><strong>{{ c.name }} | {{ c.date_added }}</strong></p>
+        <p class="card-text ">{{ c.body | safe }}</p>
+      </div>
+    </div>
+          </div><hr>
+      {% endfor %}
+  {% endif %}
+
+  </form>
+  </div>
+</div>
+</body>
+</html>

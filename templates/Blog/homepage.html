@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- CSS only -->
+
+    <link rel="stylesheet" type="text/css" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <title>Title</title>
+    <style>
+     nav{
+ background: #4b4276;
+  position:absolute;
+  top:0;
+  bottom:0;
+  height:100%;
+  left:0;
+  width:70px;
+         overflow: hidden;
+           -webkit-transition:width .2s linear;
+  transition:width .2s linear;
+}
+     nav:hover
+     {
+         width:240px;
+     }
+     body{
+         background-color: #fdfdfd;
+         font-family: "Times New Roman", sans-serif;
+     }
+     a {
+  position:relative;
+  text-decoration:none;
+  color:white;
+  font-size: 23px;
+
+         border-bottom: 2px solid #bdb8d7;
+  border-bottom: 2px solid rgba(0,0,0,0.05);
+  border-top: 2px solid rgba(255,255,255,0.05);
+         display: table;
+         width:235px;
+}
+     .fa {
+  position: relative;
+  width:70px;
+  height: 46px;
+  text-align: center;
+  top:12px;
+  font-size:20px;
+}
+     nav .nav-text  {
+  position:relative;
+  top:15px;
+}
+     a:hover{
+   color:#fff;
+    background-color: #594f8d;
+}
+a:active {
+  background-color: green;
+  color: white;
+}
+     .wrapper .main_content{
+  width: 100%;
+  margin-left: 240px;
+}
+     .wrapper h2{
+  color: #fff;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 30px;
+}
+     .wrapper .main_content .header{
+  padding: 10px;
+ background: #594f8d;
+  border-bottom: 3px solid #ffffff;
+           color: #fff;
+  text-transform: uppercase;
+
+}
+     .wrapper .main_content .info{
+  margin: 10px;
+         background: #594f8d;
+  color: #fff;
+  line-height: 25px;
+}
+
+.card {
+        box-shadow: 0 16px 48px #E3E7EB;
+    }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+<nav>
+    <h2>Profile</h2>
+    <a href=" ">
+         <i class="fa fa-home fa-lg"></i>
+
+    <span class="nav-text">Hello{{ request.user }}</span>
+  </a>
+
+
+<a href=" ">
+    <i class="fa fa-home fa-lg"></i>
+    <span class="nav-text">Home</span>
+  </a>
+
+    {% if user.is_authenticated %}
+    <a href=" ">
+      <i class="fa fa-envelope-o fa-lg"></i>
+      <span class="nav-text">FeedBack</span>
+    </a>
+    <a href="{% url 'add_post' %}">
+      <i class="fa fa-plus fa-lg"></i>
+      <span class="nav-text">AddPost</span>
+    </a>
+        <a href="{% url 'logout' %}">
+      <i class="fa fa-plus fa-lg"></i>
+      <span class="nav-text">Logout</span>
+    </a>
+        <a href="{% url 'update' %}">
+      <i class="fa fa-plus fa-lg"></i>
+      <span class="nav-text">Update</span>
+    </a>
+{% else %}
+      <a href="{% url 'register' %}">
+      <i class="fa fa-book fa-lg"></i>
+      <span class="nav-text">Register</span>
+    </a>
+ <a href="{% url 'login' %}">
+      <i class="fa fa-plus fa-lg"></i>
+      <span class="nav-text">Login</span>
+    </a>
+    {% endif %}
+</nav>
+<div class="main_content">
+    <div class="header">Your Posts</div>
+<div class="info">
+<div class="col-md-8 mt-3 left">
+  {% for post in post_list %}
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h1 class="card-title">{{ post.title }}</h1>
+                    <small>
+                    <p class="card-text text-muted h6">{{ post.author }} | {{ post.created_on}} </p>
+                        {% if post.author.id == request.user.id %}
+                            <a  href="{% url 'post_update' post.slug %}">EditPost &rarr;</a>
+                             <a  href="{% url 'post_delete' post.slug  %}">DeletePost &rarr;</a>
+
+                        {% endif %}
+                    </small>
+                    <p class="card-text">{{post.content|safe }}</p>
+                    <a  href="{% url 'post_detail' post.slug   %}">Read More!! &rarr;</a>
+                </div>
+            </div>
+            {% endfor %}
+</div>
+</div>
+</div>
+</div>
+
+</body>
+</html>
